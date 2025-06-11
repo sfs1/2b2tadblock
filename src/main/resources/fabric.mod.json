@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "adblock",
+  "version": "${version}",
+  "name": "2b2t AdBlock",
+  "description": "",
+  "authors": [ "sarfe_" ],
+  "contact": {},
+  "license": "GPL-3.0",
+  "icon": "assets/adblock/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "com.sfsarfe.adblock.client.AdblockClient"
+    ],
+    "modmenu": [
+      "com.sfsarfe.adblock.client.ModMenuIntegration"
+    ]
+  },
+  "mixins": [
+    "adblock.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": ">=${minecraft_version}",
+    "cloth-config": ">=15.0.140",
+    "modmenu": ">=11.0.1"
+  }
+}
