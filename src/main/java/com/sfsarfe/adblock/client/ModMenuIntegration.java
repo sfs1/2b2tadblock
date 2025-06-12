@@ -62,6 +62,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 .setSaveConsumer(newval -> config.customRegex = newval)
                 .setErrorSupplier((value) -> {
                     try {
+                        //noinspection ResultOfMethodCallIgnored
                         "test value".matches(value);
                         return Optional.empty();
                     } catch (Exception e) {
@@ -70,6 +71,7 @@ public class ModMenuIntegration implements ModMenuApi {
                 })
                 .build()
         );
+
 
 
         /*
@@ -126,6 +128,16 @@ public class ModMenuIntegration implements ModMenuApi {
                 .build()
         );
 
+
+        // Spam Message Similarity Threshold
+        spamCategory.addEntry(spamEntryBuilder
+                .startDoubleField(Text.of("Message Similarity Threshold (0-1)"), config.spamFilterSimilarityThreshold)
+                .setMin(0)
+                .setMax(1)
+                .setDefaultValue(0.8)
+                .setSaveConsumer(newval -> config.spamFilterSimilarityThreshold = newval)
+                .build()
+        );
 
 
         return builder.build();
