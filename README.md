@@ -6,6 +6,12 @@
 - [Cloth Config](https://modrinth.com/mod/cloth-config/versions?l=fabric) >= 15.0.140
 - [Mod Menu](https://modrinth.com/mod/modmenu/versions?c=release&l=fabric) >=11.0.1
 
+## Build Instructions
+1. READ THE FUCKING SOURCE CODE!!!!
+2. Unzip the source, open a command prompt/terminal in it
+3. Type `gradlew.bat build` on windows or `./gradlew build` on linux/mac
+4. Jar should be in `build/libs/2b2t-adblock-1.0.jar`
+
 ## How it works
 If a chat message passes the regex (test to check if two strings match pretty much), the message is not shown on the client.
 
@@ -15,3 +21,7 @@ If a chat message passes the regex (test to check if two strings match pretty mu
 - `ModMenuIntegration.java` has the config screen, heavy lifting is done by mod menu
 - `AdblockClient.java` initialises the config and fetches the regex from github if enabled
 Have fun hacking away, i guess
+
+## TODO:
+- [ ] Spam filtering
+- [ ] Shadow cloth config and mod menu in output jar?????
