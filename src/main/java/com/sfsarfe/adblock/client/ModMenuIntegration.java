@@ -107,7 +107,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
         // Spam message min length
         spamCategory.addEntry(spamEntryBuilder
-                .startIntField(Text.of("Spam Min Length"), config.spamFilterMinLength)
+                .startIntField(Text.of("Spam Message Min Length"), config.spamFilterMinLength)
                 .setMin(0)
                 .setMax(50)
                 .setDefaultValue(10)
@@ -139,6 +139,9 @@ public class ModMenuIntegration implements ModMenuApi {
                 .build()
         );
 
+        builder.setAfterInitConsumer(screen -> {
+            AdblockClient.fetchRegex();
+        });
 
         return builder.build();
 

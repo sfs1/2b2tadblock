@@ -56,6 +56,10 @@ public class MessageFiltering {
 
         messageHistory.removeIf(msg -> (now - msg.timestamp) > config.spamFilterFrequency * 1000L * 60L);
 
+
+        if (message.getString().length() < config.spamFilterMinLength)
+            return false;
+
         messageHistory.add(new TimedMessage(message.getString(), now));
 
 

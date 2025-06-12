@@ -10,7 +10,7 @@
 1. READ THE FUCKING SOURCE CODE!!!! (or at least get chatgpt to read it)
 2. Unzip the source, open a command prompt/terminal in it
 3. Type `gradlew.bat build` on windows or `./gradlew build` on linux/mac
-4. Jar should be in `build/libs/2b2t-adblock-1.0.jar`
+4. Jar should be in `build/libs/2b2t-adblock-(version).jar`
 
 
 
@@ -27,3 +27,6 @@ Have fun hacking away, i guess
 - [ ] Shadow cloth config and mod menu in output jar?????
 - [ ] filter chat messages at packet level
 - [ ] different adblock regex for other servers
+- [ ] seperate message from name
+- [ ] right click /ignore
+- [ ] allowing sending non-ad discord links in /msg
