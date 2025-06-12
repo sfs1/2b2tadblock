@@ -1,4 +1,4 @@
-# Minecraft Chat Adblocker
+# Minecraft Chat Adblocker and AntiSpam
 
 ## Requirements:
 - Minecraft >= 1.21
@@ -12,11 +12,11 @@
 3. Type `gradlew.bat build` on windows or `./gradlew build` on linux/mac
 4. Jar should be in `build/libs/2b2t-adblock-1.0.jar`
 
-## How it works
-If a chat message passes the regex (test to check if two strings match pretty much), the message is not shown on the client.
+
 
 ## Hacking
-- `ChatHudMixin.java` contains the code for the regex matching and chat filtering
+- `ChatHudMixin.java` just calls into MessageFiltering for adblock and antispam
+- `MessageFiltering.java` has the code for adblocking and antispam
 - `ModConfig.java` has the configuration fields (variables?), (de)serialisation is done by cloth config
 - `ModMenuIntegration.java` has the config screen, heavy lifting is done by mod menu
 - `AdblockClient.java` initialises the config and fetches the regex from github if enabled
