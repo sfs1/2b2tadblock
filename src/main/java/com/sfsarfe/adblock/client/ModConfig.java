@@ -10,4 +10,11 @@ public class ModConfig implements ConfigData
     public boolean enableAdblock = false;
     public boolean autoupdateRegex = false;
     public String webRegex = "";
+    public boolean enableSpamFilter = false;
+    public boolean spamFilterAutoIgnore = true;
+    public String spamFilterIgnoreCommand = "/ignore";
+    public int spamFilterMessageCount = 3;
+    public int spamFilterFrequency = 15;
+    public int spamFilterMinLength = 10;
+    public double spamFilterSimilarityThreshold = 0.8;
 }

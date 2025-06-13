@@ -1,5 +1,6 @@
 package com.sfsarfe.adblock.client.mixin;
 
+import com.sfsarfe.adblock.client.MessageFiltering;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.network.message.MessageSignatureData;
 import net.minecraft.text.Text;
@@ -22,43 +23,18 @@ public class ChatHudMixin {
     @Inject(method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;Lnet/minecraft/client/gui/hud/MessageIndicator;)V", at = @At("HEAD"), cancellable = true)
     private void onAddChatMessage(Text message, MessageSignatureData signatureData, MessageIndicator indicator, CallbackInfo ci)
     {
-
-        try
+//        LOGGER.info("Message: " + message.getString()); // debug shitz
+        if (MessageFiltering.containsAd(message))
         {
-            ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-
-            // do the adblocking shit
-            if (!config.enableAdblock)
-                return;
-
-            if (!config.customRegex.isEmpty())
-            {
-                Pattern customRegex = Pattern.compile(config.customRegex);
-                Matcher customMatch = customRegex.matcher(message.getString());
-
-                if (customMatch.find())
-                {
-                    ci.cancel();
-                    return;
-                }
-            }
+            ci.cancel();
+            return;
+        }
 
 
-            if (config.autoupdateRegex && !config.webRegex.isEmpty())
-            {
-                Pattern regex = Pattern.compile(config.webRegex);
-                Matcher match = regex.matcher(message.getString());
-
-                if (match.find())
-                {
-                    ci.cancel();
-                    return;
-                }
-            }
-
-        } catch(Exception e)
+        if (MessageFiltering.isSpam(message))
         {
-            e.printStackTrace();
+            ci.cancel();
+            return;
         }
     }
 }

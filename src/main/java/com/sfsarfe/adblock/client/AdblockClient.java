@@ -22,12 +22,20 @@ public class AdblockClient implements ClientModInitializer {
         // Initialise config
         InitialiseConfig();
 
+        fetchRegex();
 
+    }
+
+    public void InitialiseConfig()
+    {
+        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
+    }
+
+    public static void fetchRegex()
+    {
         ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-        // i cba to put the next part in an if
         if (!config.autoupdateRegex)
             return;
-
 
         CompletableFuture.runAsync(() -> {
             try {
@@ -49,10 +57,5 @@ public class AdblockClient implements ClientModInitializer {
                 LOGGER.error("Failed to fetch regex from github: " + e.getMessage());
             }
         });
-    }
-
-    public void InitialiseConfig()
-    {
-        AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
     }
 }
