@@ -1,1 +1,1 @@
-blockthis\([0-9]{0,8}\)
+(shulkers?\.store|shulkerstore\.com)|((discord\.com)|((discord)?(\.|_)gg))\/(invite\/)?[a-zA-Z0-9]{0,8}|(hydra|shop|shulker|2b2t|kit|store)[a-zA-Z0-9]*(\.store|\.shop)
