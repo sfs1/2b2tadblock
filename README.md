@@ -1,5 +1,13 @@
 # Minecraft Chat Adblocker and AntiSpam
 
+Blocks spam and ads in chat, technically works on other servers but it's built for 2b2t.
+
+Features:
+- Blocks spam and ads in chat
+- Configurable block regex
+- Extensive configuration via modmenu
+- Open source!
+
 ## Requirements:
 - Minecraft >= 1.21
 - Fabric >= 0.16.14
