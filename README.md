@@ -6,6 +6,7 @@ Features:
 - Blocks spam and ads in chat
 - Configurable block regex
 - Extensive configuration via modmenu
+- /ignore with right click
 - Open source!
 
 ## Requirements:
@@ -32,10 +33,8 @@ Features:
 Have fun hacking away, i guess
 
 ## TODO:
-- [ ] Spam filtering
+- [ ] Spam filtering (but better)
 - [ ] Shadow cloth config and mod menu in output jar?????
 - [ ] filter chat messages at packet level
 - [ ] different adblock regex for other servers
 - [ ] seperate message from name
-- [ ] right click /ignore
-- [ ] allowing sending non-ad discord links in /msg
