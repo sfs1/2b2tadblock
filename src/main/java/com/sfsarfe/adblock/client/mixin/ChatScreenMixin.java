@@ -60,7 +60,6 @@ public class ChatScreenMixin {
         else return;
 
         client.player.networkHandler.sendChatCommand(config.spamFilterIgnoreCommand.substring(1) + " " + playerName);
-        client.inGameHud.getChatHud().addMessage(Text.literal("Ignored " + playerName));
         cir.setReturnValue(true);
 
     }
