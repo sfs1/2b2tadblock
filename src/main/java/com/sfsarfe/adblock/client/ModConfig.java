@@ -12,7 +12,7 @@ public class ModConfig implements ConfigData
     public String webRegex = "";
     public boolean enableSpamFilter = false;
     public boolean spamFilterAutoIgnore = true;
-    public String spamFilterIgnoreCommand = "/ignore";
+    public String spamFilterIgnoreCommand = "/ignorehard";
     public int spamFilterMessageCount = 3;
     public int spamFilterFrequency = 15;
     public int spamFilterMinLength = 10;

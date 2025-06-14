@@ -118,7 +118,7 @@ public class ModMenuIntegration implements ModMenuApi {
         // Spam ignore command
         spamCategory.addEntry(spamEntryBuilder
                 .startStrField(Text.of("Ignore Command"), config.spamFilterIgnoreCommand)
-                .setDefaultValue("/ignore")
+                .setDefaultValue("/ignorehard")
                 .setSaveConsumer(newval -> config.spamFilterIgnoreCommand = newval)
                 .setErrorSupplier((value) -> {
                     if (!value.startsWith("/"))
