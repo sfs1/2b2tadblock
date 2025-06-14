@@ -139,6 +139,15 @@ public class ModMenuIntegration implements ModMenuApi {
                 .build()
         );
 
+        spamCategory.addEntry(spamEntryBuilder
+                .startBooleanToggle(Text.of("Right click ignore"), config.rightClickIgnore)
+                .setDefaultValue(false)
+                .setSaveConsumer(newval -> config.rightClickIgnore = newval)
+                .build()
+        );
+
+
+
         builder.setAfterInitConsumer(screen -> {
             AdblockClient.fetchRegex();
         });

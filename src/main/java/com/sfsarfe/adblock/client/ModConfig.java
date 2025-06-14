@@ -17,4 +17,5 @@ public class ModConfig implements ConfigData
     public int spamFilterFrequency = 15;
     public int spamFilterMinLength = 10;
     public double spamFilterSimilarityThreshold = 0.8;
+    public boolean rightClickIgnore = false;
 }
