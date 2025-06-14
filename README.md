@@ -28,6 +28,7 @@ Features:
 - `ModConfig.java` has the configuration fields (variables?), (de)serialisation is done by cloth config
 - `ModMenuIntegration.java` has the config screen, heavy lifting is done by mod menu
 - `AdblockClient.java` initialises the config and fetches the regex from github if enabled
+- `ChatScreenMixin.java` has the stuff for right click /ignore
 Have fun hacking away, i guess
 
 ## TODO:

@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.sfsarfe.adblock.client.ModConfig;
 import me.shedaniel.autoconfig.AutoConfig;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(net.minecraft.client.gui.hud.ChatHud.class)
@@ -37,4 +38,5 @@ public class ChatHudMixin {
             return;
         }
     }
+
 }
