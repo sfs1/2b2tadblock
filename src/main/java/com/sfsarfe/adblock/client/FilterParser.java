@@ -1,7 +1,10 @@
 package com.sfsarfe.adblock.client;
 
+import me.shedaniel.autoconfig.AutoConfig;
+
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /*
@@ -19,6 +22,11 @@ public class FilterParser {
         String[] lines = list.split("\n");
         List<Filter> out = new ArrayList<>();
         boolean process = true;
+        HashMap<String, String> variables = new HashMap<>();
+        // default vars
+        ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+        variables.put("$AUTOUPDATE", config.autoupdateRegex ? "true" : "false");
+        // dunno what else to put here
 
         for (int i = 0; i < lines.length; i++)
         {
@@ -39,8 +47,11 @@ public class FilterParser {
                 {
                     case "!IF":
                     {
-                        // IF stuff goes here
-                        boolean condition = false;
+                        // evaluate the expression
+                        String expression = line.substring(parts[0].length());
+
+                        boolean condition = evaluateExpression(expression, server, variables).equals("true");
+
                         process = !condition;
                         continue;
                     }
@@ -79,6 +90,12 @@ public class FilterParser {
         }
 
         return out;
+    }
+
+    private static String evaluateExpression(String expression, String server, HashMap<String, String> variables) throws ParseException
+    {
+        // i'll get around to this later
+        return "true";
     }
 
     // idk ill prob rename or redo this
