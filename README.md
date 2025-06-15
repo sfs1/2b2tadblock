@@ -6,7 +6,13 @@ Features:
 - Blocks spam and ads in chat
 - Configurable block regex
 - Extensive configuration via modmenu
+- Right click /ignore
 - Open source!
+
+See with [Wiki](https://github.com/sfs1/2b2tadblock/wiki) for help. **(WIP)**
+
+For anything else, open an issue
+
 
 ## Requirements:
 - Minecraft >= 1.21
