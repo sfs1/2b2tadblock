@@ -1,13 +1,8 @@
 package com.sfsarfe.adblock.client;
 
-import me.shedaniel.autoconfig.AutoConfig;
-
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /*
 Syntax:
@@ -15,17 +10,16 @@ Syntax:
 # comment
 !SERVER (ip, e.g. *.2b2t.org)
 blockthis\([0-9]*\)
-alsoblockthis\(${myvar}\)
 
  */
 public class FilterParser {
     public static List<Filter> parseList(String list) throws ParseException {
         String[] lines = list.split("\n");
         List<Filter> out = new ArrayList<>();
+        String server = ".*";
         for (int i = 0; i < lines.length; i++)
         {
             String line = lines[i];
-            String server = "*";
 
             String[] parts;
             if (line.contains(" "))

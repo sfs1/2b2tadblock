@@ -55,23 +55,22 @@ public class ModMenuIntegration implements ModMenuApi {
         );
 
 
-        // Custom regex
+        // blocklist url
         adblockCategory.addEntry(adblockEntryBuilder
-                .startTextField(Text.of("Custom Regex"), config.customRegex)
-                .setDefaultValue("")
-                .setSaveConsumer(newval -> config.customRegex = newval)
+                .startTextField(Text.of("Remote Blocklist URL"), config.blocklistUrl)
+                .setDefaultValue("https://raw.githubusercontent.com/sfs1/2b2tadblock/refs/heads/main/blocklist.txt")
                 .setErrorSupplier((value) -> {
-                    try {
-                        //noinspection ResultOfMethodCallIgnored
-                        "test value".matches(value);
+                    if (value.matches("https?://.*\\..*/.*"))
                         return Optional.empty();
-                    } catch (Exception e) {
-                        return Optional.of(Text.of("Invalid regex!"));
-                    }
+                    return Optional.of(Text.of("Invalid URL"));
                 })
+                .setSaveConsumer(newval -> config.blocklistUrl = newval)
                 .build()
         );
 
+
+
+        // somehow add buttons to open the blocklist file
 
 
         /*
@@ -149,7 +148,7 @@ public class ModMenuIntegration implements ModMenuApi {
 
 
         builder.setAfterInitConsumer(screen -> {
-            AdblockClient.fetchRegex();
+            AdblockClient.fetchBlocklist();
         });
 
         return builder.build();
