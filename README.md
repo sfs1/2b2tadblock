@@ -26,6 +26,8 @@ For anything else, open an issue
 3. Type `gradlew.bat build` on windows or `./gradlew build` on linux/mac
 4. Jar should be in `build/libs/2b2t-adblock-(version).jar`
 
+## Contact
+Github issues (preferred) or `sarfes_` on discord
 
 
 ## Hacking
