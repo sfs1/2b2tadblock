@@ -1,7 +1,6 @@
 package com.sfsarfe.adblock.client;
 
 import com.mojang.brigadier.Command;
-import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -12,10 +11,6 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientCommandSource;
-import net.minecraft.command.CommandSource;
-import net.minecraft.server.command.CommandManager;
-import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
 
 
@@ -32,6 +27,7 @@ import static net.minecraft.command.CommandSource.suggestMatching;
 
 public class CommandConfig {
     private static final String MESSAGE_PREFIX = "§c[AdBlock]§f ";
+    private static final ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
     public static void registerCommands() {
         MinecraftClient client = MinecraftClient.getInstance();
@@ -164,76 +160,16 @@ public class CommandConfig {
     }
 
 
-    private static int editBlocklistsCommand(CommandContext<FabricClientCommandSource> context)
-    {
+    private static int editBlocklistsCommand(CommandContext<FabricClientCommandSource> context) {
         MinecraftClient client = MinecraftClient.getInstance();
-        if (AdblockClient.editBlocklist())
-        {
+        if (AdblockClient.editBlocklist()) {
+            if (config.verboseMode)
+                client.player.sendMessage(Text.of(MESSAGE_PREFIX + "OK."));
+        } else {
             client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Failed to open blocklists file. Set the EDITOR environment variable to a text editor"));
-        }
-        else
-        {
-            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "OK."));
         }
         return Command.SINGLE_SUCCESS;
     }
-//    {
-//        MinecraftClient client = MinecraftClient.getInstance();
-//
-//        ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
-//
-//
-//        String editor = System.getenv("EDITOR");
-//        if (editor == null) {
-////            // get the OS
-////            String os = System.getProperty("os.name").toLowerCase();
-////            if (os.contains("win"))
-////                os = "windows";
-////            else if (os.contains("nix") | os.contains("nux") | os.contains("mac"))
-////                os = "unix";
-////            else
-////            {
-////                client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Unable to find an editor. Set the EDITOR environment variable with a text editor (e.g. notepad) of your choice."));
-////
-////            }
-//
-//            for (String ed : ALL_EDITORS)
-//            {
-//                if (checkOnPath(ed))
-//                {
-//                    ProcessBuilder pb = new ProcessBuilder(ed, Paths.get(config.blockListPath).toAbsolutePath().toString()); // should probably work
-//                    pb.redirectErrorStream(true);
-//                    try {
-//                        pb.start();
-//                        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Launched blocklist file with " + ed));
-//                        return Command.SINGLE_SUCCESS;
-//
-//                    } catch (IOException e) {
-//                        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Error launching blocklist file with " + ed));
-//                    }
-//                }
-//            }
-//        }
-//        else // editor != null
-//        {
-//            if (checkOnPath(editor))
-//            {
-//                ProcessBuilder pb = new ProcessBuilder(editor, Paths.get(config.blockListPath).toAbsolutePath().toString()); // should probably work
-//                pb.redirectErrorStream(true);
-//                try {
-//                    pb.start();
-//                    client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Launched blocklist file with " + editor));
-//                    return Command.SINGLE_SUCCESS;
-//
-//                } catch (IOException e) {
-//                    client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Error launching blocklist file with " + editor));
-//                }
-//            }
-//        }
-//
-//        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Unable to find an editor on PATH. Set the EDITOR environment variable with a text editor (e.g. notepad) of your choice."));
-//        return Command.SINGLE_SUCCESS;
-//    }
 
 
 

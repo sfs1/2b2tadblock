@@ -1,7 +1,5 @@
 package com.sfsarfe.adblock.client;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
@@ -15,9 +13,6 @@ import java.net.URL;
 import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 
-import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
