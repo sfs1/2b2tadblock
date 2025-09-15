@@ -1,10 +1,13 @@
 package com.sfsarfe.adblock.client;
 
+import com.mojang.brigadier.Command;
+import com.mojang.brigadier.context.CommandContext;
 import net.fabricmc.api.ClientModInitializer;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.serializer.GsonConfigSerializer;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -12,6 +15,9 @@ import java.net.URL;
 import java.nio.file.*;
 import java.util.concurrent.CompletableFuture;
 
+import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,10 +33,6 @@ public class AdblockClient implements ClientModInitializer {
         InitialiseConfig();
 
         fetchBlocklist();
-
-
-
-
 
     }
 
@@ -112,8 +114,6 @@ public class AdblockClient implements ClientModInitializer {
             e.printStackTrace();
         }
 
-
-
     }
 
     public static void fetchBlocklist()
@@ -147,4 +147,74 @@ public class AdblockClient implements ClientModInitializer {
             MessageFiltering.loadBlocklists();
         });
     }
+
+    // Checks if a program is on $PATH
+    private static boolean checkOnPath(String name)
+    {
+        String path = System.getenv("PATH");
+        if (path == null) return false;
+
+        String[] dirs = path.split(File.pathSeparator);
+
+        for (String dir : dirs)
+        {
+            File f = new File(dir, name);
+            if (f.exists()) System.out.println(f.getPath() + " exists");
+            if (f.exists() && f.canRead() && f.canExecute())
+                return true;
+        }
+        return false;
+    }
+
+
+    private static final String[] ALL_EDITORS = {"vscode", "notepad",  "nano", "nvim", "vim", "vi", "emacs"};
+
+
+    public static boolean editBlocklist() {
+
+        ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+
+
+        // unix systems will often have $EDITOR set
+        String editor = System.getenv("EDITOR");
+
+        if (editor != null) {
+            if (checkOnPath(editor)) {
+                ProcessBuilder pb = new ProcessBuilder(editor, Paths.get(config.blockListPath).toAbsolutePath().toString()); // should probably work
+                pb.redirectErrorStream(true);
+                try {
+                    pb.start();
+                    return true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+
+        String os = System.getProperty("os.name").toLowerCase().contains("win") ? "windows" : "unix";
+        for (String ed : ALL_EDITORS) {
+            if (checkOnPath(ed + (os.equals("windows") ? ".exe" : ""))) {
+                if (config.verboseMode)
+                {
+                    LOGGER.info("Using editor " + ed + (os.equals("windows") ? ".exe" : ""));
+                    LOGGER.info("Blocklist path: " + Paths.get(config.blockListPath).toAbsolutePath().toString());
+                }
+                ProcessBuilder pb = new ProcessBuilder(ed + (os.equals("windows") ? ".exe" : ""), "\"" + Paths.get(config.blockListPath).toAbsolutePath().toString() + "\""); // should probably work
+                pb.redirectErrorStream(true);
+                try {
+                    pb.start();
+                    return true;
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+        }
+        return false;
+    }
+
+
 }

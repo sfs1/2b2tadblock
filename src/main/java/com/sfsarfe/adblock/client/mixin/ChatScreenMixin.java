@@ -35,7 +35,8 @@ public class ChatScreenMixin {
 
 
         // try to extract the name from either clickEvent (2b2t) or hoverEvent (vanilla)
-        // sorta crude ig but it works so eh who cares, if it aint broke dont fix it
+        // sorta crude ig but it works so eh who cares, if it aint broke dont fix it (it is broke)
+        // TODO: check if the player name is valid somehow?
         String playerName;
         ClickEvent clickEvent = style.getClickEvent();
         HoverEvent hoverEvent = style.getHoverEvent();

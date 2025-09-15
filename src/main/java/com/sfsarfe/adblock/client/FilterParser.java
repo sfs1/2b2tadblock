@@ -8,7 +8,7 @@ import java.util.List;
 Syntax:
 
 # comment
-!SERVER (ip, e.g. *.2b2t.org)
+!SERVER (ip, e.g. *.2b2t.org) (maybe)
 blockthis\([0-9]*\)
 
  */

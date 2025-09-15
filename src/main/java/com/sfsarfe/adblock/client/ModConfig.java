@@ -24,9 +24,16 @@ public class ModConfig implements ConfigData
     @Description("How long chat messages are considered for spam")
     public int spamFilterFrequency = 15;
     @Description("Minimum length of spam messages")
+
     public int spamFilterMinLength = 10;
     @Description("How similar a message has to be to others, for it to be considered spam")
     public double spamFilterSimilarityThreshold = 0.8;
     @Description("Ignore by right clicking someone's name")
     public boolean rightClickIgnore = false;
+    @Description("Check whether there is a new version on github.")
+    public boolean checkUpdates = false;
+
+    public boolean verboseMode = false;
+    public String blockListPath = "config/adblock/blocklist.txt";
+    public String remoteBlocklistPath = "";
 }

@@ -1,5 +1,6 @@
 package com.sfsarfe.adblock.client;
 
+import com.sfsarfe.adblock.client.gui.ConfigButton;
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;
 import me.shedaniel.autoconfig.AutoConfig;
@@ -37,6 +38,10 @@ public class ModMenuIntegration implements ModMenuApi {
 
         ConfigCategory spamCategory = builder.getOrCreateCategory(Text.of("Spam Filter"));
         ConfigEntryBuilder spamEntryBuilder = builder.entryBuilder();
+
+
+        ConfigCategory debugCategory = builder.getOrCreateCategory(Text.of("Debug"));
+        ConfigEntryBuilder debugEntryBuilder = builder.entryBuilder();
 
         // Enable adblock option
         adblockCategory.addEntry(adblockEntryBuilder
@@ -142,6 +147,24 @@ public class ModMenuIntegration implements ModMenuApi {
                 .startBooleanToggle(Text.of("Right click ignore"), config.rightClickIgnore)
                 .setDefaultValue(false)
                 .setSaveConsumer(newval -> config.rightClickIgnore = newval)
+                .build()
+        );
+
+
+        debugCategory.addEntry(debugEntryBuilder
+                .startBooleanToggle(Text.of("Verbose mode (debug)"), config.verboseMode)
+                .setDefaultValue(false)
+                .setSaveConsumer(newval -> config.verboseMode = newval)
+                .build()
+        );
+
+        debugCategory.addEntry(new ConfigButton(Text.of("Reload Blocklists"), AdblockClient::fetchBlocklist));
+        debugCategory.addEntry(new ConfigButton(Text.of("Edit Blocklists"), AdblockClient::fetchBlocklist));
+
+        debugCategory.addEntry(debugEntryBuilder
+                .startTextField(Text.of("Blocklist Path"), config.blockListPath)
+                .setDefaultValue("config/adblock/blocklist.txt")
+                .setSaveConsumer(newval -> config.blockListPath = newval)
                 .build()
         );
 
