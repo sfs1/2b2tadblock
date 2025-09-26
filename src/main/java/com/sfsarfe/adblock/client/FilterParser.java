@@ -14,8 +14,6 @@ blockthis\([0-9]*\)
 minehut-block-[0-9]{1,4}
 
 
-TODO: explicitly use *.server.com and maybe CIDR ranges for ips?
-
  */
 public class FilterParser {
     public static List<Filter> parseList(String list) throws ParseException {
