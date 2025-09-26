@@ -8,15 +8,21 @@ import java.util.List;
 Syntax:
 
 # comment
-!SERVER (ip, e.g. *.2b2t.org) (maybe)
+!SERVER 2b2t.org (runs for all 2b2t.org servers)
 blockthis\([0-9]*\)
+!SERVER minehut.com (runs for all minehut.com servers)
+minehut-block-[0-9]{1,4}
+
+
+TODO: explicitly use *.server.com and maybe CIDR ranges for ips?
 
  */
 public class FilterParser {
     public static List<Filter> parseList(String list) throws ParseException {
+        list = list.replace("\r\n", "\n"); // fuck you windows
         String[] lines = list.split("\n");
         List<Filter> out = new ArrayList<>();
-        String server = ".*";
+        String server = "";
         for (int i = 0; i < lines.length; i++)
         {
             String line = lines[i];
@@ -35,13 +41,16 @@ public class FilterParser {
                 {
                     case "!SERVER":
                     {
-                        if (parts.length != 2)
-                            throw new ParseException("SERVER without following server ip", i);
-                        server = parts[1];
+                        server = parts.length == 2 ? parts[1] : "";
                         continue;
                     }
                 }
+                throw new ParseException("Invalid directive: `" + line + "'", i);
             }
+
+            // don't add blank regexes. that will end... badly
+            if (line.isBlank())
+                continue;
 
             try {
                 "test value".matches(line);

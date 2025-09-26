@@ -162,7 +162,7 @@ public class AdblockClient implements ClientModInitializer {
     }
 
 
-    private static final String[] ALL_EDITORS = {"vscode", "notepad",  "nano", "nvim", "vim", "vi", "emacs"};
+    private static final String[] ALL_EDITORS = { "vscode", "notepad", "nvim", "vim", "nano", "vi", "emacs" };
 
 
     public static boolean editBlocklist() {

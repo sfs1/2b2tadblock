@@ -5,6 +5,7 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
+import jdk.jfr.Description;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
@@ -135,8 +136,8 @@ public class CommandConfig {
 
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock v" + version));
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "This mod is licensed under the GNU GPLv3 license"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "You can see the source code at: https://github.com/sfs1/2b2tadblock"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "- sfsarfe :)"));
+        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "You can see the source code at: https://github.com/sfs1/2b2tadblock")); // if you fork, pls change this url
+        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "- sfsarfe :-)"));
         return Command.SINGLE_SUCCESS;
     }
     private static int configCommand(CommandContext<FabricClientCommandSource> context)
@@ -148,14 +149,55 @@ public class CommandConfig {
     private static int getConfigCommand(CommandContext<FabricClientCommandSource> context)
     {
         MinecraftClient client = MinecraftClient.getInstance();
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "not implemented"));
+
+        String configName = context.getArgument("Config Name", String.class);
+
+
+        Field f;
+        try {
+            f = ModConfig.class.getField(configName);
+        } catch (NoSuchFieldException e) {
+            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        Description description = f.getAnnotation(Description.class);
+
+        // cant have too many brackets, right? (im always right)
+        client.player.sendMessage(Text.of(MESSAGE_PREFIX + configName + (description != null && !description.value().isBlank() ? ": " + description.value() : "")));
+        try {
+            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Value (default): " + f.get(config) + " (" + f.get(new ModConfig()) + ")"));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
         return Command.SINGLE_SUCCESS;
     }
 
     private static int setConfigCommand(CommandContext<FabricClientCommandSource> context)
     {
         MinecraftClient client = MinecraftClient.getInstance();
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "not implemented"));
+
+        String configName = context.getArgument("Config Name", String.class);
+        String value = context.getArgument("Value", String.class);
+
+        Field f;
+        Object oldValue;
+        try {
+            f = ModConfig.class.getField(configName);
+        } catch (NoSuchFieldException e) {
+            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
+            return Command.SINGLE_SUCCESS;
+        }
+
+        try {
+            oldValue = f.get(config);
+            f.set(config, convertToFieldType(f, value));
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+
+        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Set " + configName + " to " + value + " (old value: " + oldValue + " )"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -171,6 +213,16 @@ public class CommandConfig {
         return Command.SINGLE_SUCCESS;
     }
 
+
+    public static Object convertToFieldType(Field field, String s) {
+        Class<?> t = field.getType();
+
+        if (t == String.class) return s;
+        if (t == int.class || t == Integer.class) return Integer.parseInt(s);
+        if (t == double.class || t == Double.class) return Double.parseDouble(s);
+        if (t == boolean.class || t == Boolean.class) return Boolean.parseBoolean(s);
+        throw new IllegalArgumentException("Unsupported field type: " + t.getName());
+    }
 
 
 }

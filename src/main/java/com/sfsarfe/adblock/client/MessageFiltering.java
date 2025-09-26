@@ -22,13 +22,14 @@ public class MessageFiltering {
 
     private static final Logger LOGGER = LoggerFactory.getLogger("adblock");
 
+    private static final ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+
     private static Map<String, String> filters;
 
     public static boolean containsAd(Text message)
     {
         try
         {
-            ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
 
             // do the adblocking shit
             if (!config.enableAdblock)
@@ -46,13 +47,15 @@ public class MessageFiltering {
             }
 
             // find the filters that apply to this server
+            // filters are already sorted and combined so this should be relatively cheap
             List<String> serverFilters = new ArrayList<>();
             for (Map.Entry<String, String> entry : filters.entrySet())
             {
-                if (address.matches(entry.getKey()))
+                if (address.endsWith(entry.getKey()))
                     serverFilters.add(entry.getValue());
             }
-            System.out.println("Filters: " + serverFilters);
+            if (config.verboseMode)
+                LOGGER.info("Filters: " + serverFilters);
             if (serverFilters.isEmpty())
                 return false;
 
@@ -60,6 +63,8 @@ public class MessageFiltering {
             // go thru each filter, checking if it applies
             for (String filterRegex : serverFilters)
             {
+                if (config.verboseMode)
+                    LOGGER.info("applying filter \"" + filterRegex + "\"");
                 Pattern pattern = Pattern.compile(filterRegex);
                 Matcher matcher = pattern.matcher(msg);
                 if (matcher.find())
@@ -83,13 +88,24 @@ public class MessageFiltering {
         } catch (ParseException e) {
             LOGGER.error("Error parsing blocklist. Adblocking has been disabled, you must manually re-enable it in the config.");
             e.printStackTrace(System.err);
-            ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
             config.enableAdblock = false;
             return;
         }
 
+        /*
+         basically what we wanna do is:
+
+         - create a map<ServerIP, CombinedRegexes>
+         - take the unsorted regexes from newFilters (which is a List<Filter>)
+         - sort those regexes and combine them into the output map, indexed by the server ip
+
+        */
+
         // combine each regex, sort them by server
+
         Map<String, String> combinedFilters = newFilters.stream()
+                .filter(Objects::nonNull)
+                .filter(f -> f.server() != null && f.blockRegex() != null)
                 .collect(Collectors.groupingBy(
                         FilterParser.Filter::server,
                         Collectors.mapping(
@@ -125,7 +141,6 @@ public class MessageFiltering {
 
     public static boolean isSpam(Text message)
     {
-        ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         long now = System.currentTimeMillis();
 
         messageHistory.removeIf(msg -> (now - msg.timestamp) > config.spamFilterFrequency * 1000L * 60L);

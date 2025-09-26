@@ -30,10 +30,11 @@ public class ModConfig implements ConfigData
     public double spamFilterSimilarityThreshold = 0.8;
     @Description("Ignore by right clicking someone's name")
     public boolean rightClickIgnore = false;
-    @Description("Check whether there is a new version on github.")
+    @Description("Check whether there is a new version on github.") // TODO
     public boolean checkUpdates = false;
 
     public boolean verboseMode = false;
-    public String blockListPath = "config/adblock/blocklist.txt";
-    public String remoteBlocklistPath = "";
+    public String blockListPath = "config/adblock/blocklist.txt"; // TODO: USE THIS
+    public String remoteBlocklistPath = "config/adblock/remoteblocklist.txt"; // TODO: USE THIS
+
 }

@@ -151,6 +151,7 @@ public class ModMenuIntegration implements ModMenuApi {
         );
 
 
+
         debugCategory.addEntry(debugEntryBuilder
                 .startBooleanToggle(Text.of("Verbose mode (debug)"), config.verboseMode)
                 .setDefaultValue(false)
@@ -158,8 +159,9 @@ public class ModMenuIntegration implements ModMenuApi {
                 .build()
         );
 
+
         debugCategory.addEntry(new ConfigButton(Text.of("Reload Blocklists"), AdblockClient::fetchBlocklist));
-        debugCategory.addEntry(new ConfigButton(Text.of("Edit Blocklists"), AdblockClient::fetchBlocklist));
+        debugCategory.addEntry(new ConfigButton(Text.of("Edit Blocklists"), AdblockClient::editBlocklist));
 
         debugCategory.addEntry(debugEntryBuilder
                 .startTextField(Text.of("Blocklist Path"), config.blockListPath)
