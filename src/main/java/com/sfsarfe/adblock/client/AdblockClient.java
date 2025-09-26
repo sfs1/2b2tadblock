@@ -35,19 +35,20 @@ public class AdblockClient implements ClientModInitializer {
     {
         AutoConfig.register(ModConfig.class, GsonConfigSerializer::new);
 
+        ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
         try {
 
             Path configDir = Paths.get("config/adblock");
             if (!Files.exists(configDir))
                 Files.createDirectory(configDir);
 
-            Path blocklistPath = Paths.get("config/adblock/blocklist.txt");
+            Path blocklistPath = Paths.get(config.blockListPath);
             if (!Files.exists(blocklistPath))
             {
                 Files.createFile(blocklistPath);
                 Files.writeString(blocklistPath, "# Adblock block list. Each line is a seperate block. See https://github.com/sfs1/2b2tadblock for more details.");
             }
-            Path webBlocklistPath = Paths.get("config/adblock/remoteblocklist.txt");
+            Path webBlocklistPath = Paths.get(config.remoteBlocklistPath);
             if (!Files.exists(webBlocklistPath))
             {
                 Files.createFile(webBlocklistPath);
@@ -132,7 +133,7 @@ public class AdblockClient implements ClientModInitializer {
                 }
 
                 String blocklist = content.toString().strip();
-                Path webBlocklistPath = Paths.get("config/adblock/remoteblocklist.txt");
+                Path webBlocklistPath = Paths.get(config.remoteBlocklistPath);
                 Files.writeString(webBlocklistPath, blocklist);
 
 

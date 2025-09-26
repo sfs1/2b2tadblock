@@ -121,11 +121,11 @@ public class MessageFiltering {
     public static void loadBlocklists()
     {
 
-        Path webBlocklistPath = Paths.get("config/adblock/remoteblocklist.txt");
-        Path blocklistPath = Paths.get("config/adblock/blocklist.txt");
+        Path removeBlocklistPath = Paths.get(config.remoteBlocklistPath);
+        Path blocklistPath = Paths.get(config.blockListPath);
 
         try {
-            String remoteBlocklist = Files.readString(webBlocklistPath);
+            String remoteBlocklist = Files.readString(removeBlocklistPath);
             String localBlocklist = Files.readString(blocklistPath);
             loadBlocklists(remoteBlocklist, localBlocklist);
         } catch (IOException e) {
