@@ -30,7 +30,7 @@ jobs:
       - name: Upload JAR to artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fabric-mod
+          name: adblock-jar
           path: build/libs/*.jar
 
       - name: Create new github release
