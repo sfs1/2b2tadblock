@@ -1,6 +1,7 @@
 package com.sfsarfe.adblock.client;
 
 import com.mojang.brigadier.Command;
+import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.Suggestions;
@@ -12,14 +13,13 @@ import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallba
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.fabricmc.loader.FabricLoader;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.text.ClickEvent;
+import net.minecraft.text.HoverEvent;
+import net.minecraft.text.Style;
 import net.minecraft.text.Text;
 
-
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Type;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -42,6 +42,9 @@ public class CommandConfig {
                             .executes(CommandConfig::aboutCommand))
                     .then(ClientCommandManager.literal("config")
                             .executes(CommandConfig::configCommand)
+                            .then(ClientCommandManager.argument("Config Page", IntegerArgumentType.integer(1))
+                                    .executes(CommandConfig::configCommand)
+                            )
                             .then(ClientCommandManager.argument("Config Name", StringArgumentType.string())
                                     .suggests(CommandConfig::suggestOptions)
                                     .executes(CommandConfig::getConfigCommand)
@@ -138,8 +141,82 @@ public class CommandConfig {
     private static int configCommand(CommandContext<FabricClientCommandSource> context)
     {
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "not implemented"));
+
+        int configPage = 1;
+        // if it doesn't exist, we get an exception
+        try {
+            configPage = context.getArgument("Config Page", Integer.class);
+        }
+        catch(Exception e) {  }
+
+
+        Field[] fields = ModConfig.class.getFields();
+
+        System.out.println("length: " + fields.length);
+        System.out.println("from " + (configPage - 1) * 8 + " to " + configPage * 8);
+        if ((configPage - 1) * 8 > fields.length)
+        {
+            System.out.println("nope, can't show this");
+            return Command.SINGLE_SUCCESS;
+        }
+
+        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock - Config Page " + configPage));
+        for (int i = (configPage - 1) * 8; i < fields.length && i < configPage * 8; i++)
+        {
+            Field f = fields[i];
+            String value;
+            try {
+                value = f.getType() != String.class ? " (" + f.get(config) +")" : "";
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            }
+
+            client.player.sendMessage(
+                    Text.literal(MESSAGE_PREFIX)
+                            .append(
+                                    Text.literal(i + " - ")
+                                            .setStyle(Style.EMPTY.withColor(0x808080)
+                                            )
+                            )
+                            .append(Text.literal(fields[i].getName() + value)
+                                    .setStyle(Style.EMPTY.withClickEvent(
+                                            new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/adblock config " + f.getName())
+                                            )
+                                            .withHoverEvent(
+                                                    new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("/adblock config " + f.getName()))
+                                            )
+                                    )
+                            )
+            );
+
+        }
+        Text pageSelectorText = Text.literal(MESSAGE_PREFIX).append(Text.literal("[<]")
+                        .setStyle(Style.EMPTY.withClickEvent(
+                                new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/adblock config " + Math.max(configPage - 1, 0))
+                        ).withHoverEvent(
+                                new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Previous Page"))
+                                )
+                        )
+                )
+                .append(
+                        Text.literal( " Page " + configPage + "/" + (int) Math.ceil(fields.length / 8f) + " ")
+                                .setStyle(Style.EMPTY.withColor(0x808080))
+                )
+                .append(
+                        Text.literal("[>]")
+                                .setStyle(Style.EMPTY.withClickEvent(
+                                        new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, "/adblock config " + (Math.min(configPage + 1, (int) Math.ceil(fields.length / 8f) ) ) )
+                                ).withHoverEvent(
+                                        new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of("Next page"))
+                                        )
+                                )
+                );
+        client.player.sendMessage(pageSelectorText);
+
         return Command.SINGLE_SUCCESS;
     }
+
+
     private static int getConfigCommand(CommandContext<FabricClientCommandSource> context)
     {
         String configName = context.getArgument("Config Name", String.class);
