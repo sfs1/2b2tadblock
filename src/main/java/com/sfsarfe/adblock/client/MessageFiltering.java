@@ -121,11 +121,11 @@ public class MessageFiltering {
     public static void loadBlocklists()
     {
 
-        Path removeBlocklistPath = Paths.get(config.remoteBlocklistPath);
+        Path remoteBlocklistPath = Paths.get(config.remoteBlocklistPath);
         Path blocklistPath = Paths.get(config.blockListPath);
 
         try {
-            String remoteBlocklist = Files.readString(removeBlocklistPath);
+            String remoteBlocklist = Files.readString(remoteBlocklistPath);
             String localBlocklist = Files.readString(blocklistPath);
             loadBlocklists(remoteBlocklist, localBlocklist);
         } catch (IOException e) {
