@@ -29,10 +29,9 @@ import static net.minecraft.command.CommandSource.suggestMatching;
 public class CommandConfig {
     private static final String MESSAGE_PREFIX = "§c[AdBlock]§f ";
     private static final ModConfig config = AutoConfig.getConfigHolder(ModConfig.class).getConfig();
+    private static final MinecraftClient client = MinecraftClient.getInstance();
 
     public static void registerCommands() {
-        MinecraftClient client = MinecraftClient.getInstance();
-
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, registryAccess) ->
         {
 
@@ -68,8 +67,6 @@ public class CommandConfig {
 
     private static int reloadCommand(CommandContext<FabricClientCommandSource> context) {
         MessageFiltering.loadBlocklists();
-
-        MinecraftClient client = MinecraftClient.getInstance();
 
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Reloading blocklists"));
         return Command.SINGLE_SUCCESS;
@@ -120,7 +117,6 @@ public class CommandConfig {
 
     public static int helpCommand(CommandContext<FabricClientCommandSource> context)
     {
-        MinecraftClient client = MinecraftClient.getInstance();
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock Commands"));
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock help - Shows this help"));
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock about - Shows information about this mod"));
@@ -131,7 +127,6 @@ public class CommandConfig {
     }
     private static int aboutCommand(CommandContext<FabricClientCommandSource> context)
     {
-        MinecraftClient client = MinecraftClient.getInstance();
         String version = FabricLoader.INSTANCE.getModContainer("adblock").get().getMetadata().getVersion().getFriendlyString();
 
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock v" + version));
@@ -142,14 +137,11 @@ public class CommandConfig {
     }
     private static int configCommand(CommandContext<FabricClientCommandSource> context)
     {
-        MinecraftClient client = MinecraftClient.getInstance();
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "not implemented"));
         return Command.SINGLE_SUCCESS;
     }
     private static int getConfigCommand(CommandContext<FabricClientCommandSource> context)
     {
-        MinecraftClient client = MinecraftClient.getInstance();
-
         String configName = context.getArgument("Config Name", String.class);
 
 
@@ -176,8 +168,6 @@ public class CommandConfig {
 
     private static int setConfigCommand(CommandContext<FabricClientCommandSource> context)
     {
-        MinecraftClient client = MinecraftClient.getInstance();
-
         String configName = context.getArgument("Config Name", String.class);
         String value = context.getArgument("Value", String.class);
 
@@ -203,7 +193,6 @@ public class CommandConfig {
 
 
     private static int editBlocklistsCommand(CommandContext<FabricClientCommandSource> context) {
-        MinecraftClient client = MinecraftClient.getInstance();
         if (AdblockClient.editBlocklist()) {
             if (config.verboseMode)
                 client.player.sendMessage(Text.of(MESSAGE_PREFIX + "OK."));
