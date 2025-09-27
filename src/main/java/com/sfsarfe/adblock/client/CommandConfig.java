@@ -147,7 +147,7 @@ public class CommandConfig {
         try {
             configPage = context.getArgument("Config Page", Integer.class);
         }
-        catch(Exception e) {  }
+        catch(Exception e) { System.out.println("could not access Config Page argument"); }
 
 
         Field[] fields = ModConfig.class.getFields();
@@ -160,17 +160,22 @@ public class CommandConfig {
             return Command.SINGLE_SUCCESS;
         }
 
+        System.out.println("cont. 1");
+
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock - Config Page " + configPage));
         for (int i = (configPage - 1) * 8; i < fields.length && i < configPage * 8; i++)
         {
             Field f = fields[i];
-            String value;
+            System.out.println(i + " - " + f.getName());
+            String value = "";
             try {
                 value = f.getType() != String.class ? " (" + f.get(config) +")" : "";
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
+                System.out.println("IllegalAccessException while accessing type - value will not be shown");
             }
+            System.out.println("got value");
 
+            // BUG: after setting a config value, page command only shows the value thats been modified (on that page)
             client.player.sendMessage(
                     Text.literal(MESSAGE_PREFIX)
                             .append(
