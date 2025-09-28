@@ -140,7 +140,7 @@ public class CommandConfig {
     }
     private static int configCommand(CommandContext<FabricClientCommandSource> context)
     {
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "not implemented"));
+        MinecraftClient client = MinecraftClient.getInstance();
 
         int configPage = 1;
         // if it doesn't exist, we get an exception
@@ -161,6 +161,8 @@ public class CommandConfig {
         }
 
         System.out.println("cont. 1");
+        client.player.sendMessage(Text.of("test"));
+        client.player.sendMessage(Text.of("test" + configPage));
 
         client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock - Config Page " + configPage));
         for (int i = (configPage - 1) * 8; i < fields.length && i < configPage * 8; i++)
@@ -176,6 +178,8 @@ public class CommandConfig {
             System.out.println("got value");
 
             // BUG: after setting a config value, page command only shows the value thats been modified (on that page)
+            // client.player.sendMessage is for some reason not working???
+            // not even the first one outside the loop (right after cont. 1 print)
             client.player.sendMessage(
                     Text.literal(MESSAGE_PREFIX)
                             .append(
@@ -193,6 +197,8 @@ public class CommandConfig {
                                     )
                             )
             );
+
+            System.out.println("shown config name");
 
         }
         Text pageSelectorText = Text.literal(MESSAGE_PREFIX).append(Text.literal("[<]")
