@@ -71,7 +71,8 @@ public class CommandConfig {
     private static int reloadCommand(CommandContext<FabricClientCommandSource> context) {
         MessageFiltering.loadBlocklists();
 
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Reloading blocklists"));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + "Reloading blocklists"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -120,22 +121,32 @@ public class CommandConfig {
 
     public static int helpCommand(CommandContext<FabricClientCommandSource> context)
     {
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock Commands"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock help - Shows this help"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock about - Shows information about this mod"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock config - Show all available config options"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock config (name) - Show the value and the type of a config option"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "/adblock config (name) (value) - Set the value of a config option."));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + "Adblock Commands"));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + "/adblock help - Shows this help"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "/adblock about - Shows information about this mod"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "/adblock config - Show all available config options"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "/adblock config (name) - Show the value and the type of a config option"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "/adblock config (name) (value) - Set the value of a config option."));
         return Command.SINGLE_SUCCESS;
     }
     private static int aboutCommand(CommandContext<FabricClientCommandSource> context)
     {
         String version = FabricLoader.INSTANCE.getModContainer("adblock").get().getMetadata().getVersion().getFriendlyString();
 
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock v" + version));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "This mod is licensed under the GNU GPLv3 license"));
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "You can see the source code at: https://github.com/sfs1/2b2tadblock")); // if you fork, pls change this url
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "- sfsarfe :-)"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "Adblock v" + version));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "This mod is licensed under the GNU GPLv3 license"));
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "You can see the source code at: https://github.com/sfs1/2b2tadblock")); // if you fork, pls change this url
+        client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "- sfsarfe :-)"));
         return Command.SINGLE_SUCCESS;
     }
     private static int configCommand(CommandContext<FabricClientCommandSource> context)
@@ -161,10 +172,13 @@ public class CommandConfig {
         }
 
         System.out.println("cont. 1");
-        client.player.sendMessage(Text.of("test"));
-        client.player.sendMessage(Text.of("test" + configPage));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of("test" + configPage));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of("test"));
 
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Adblock - Config Page " + configPage));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + "Adblock - Config Page " + configPage));
         for (int i = (configPage - 1) * 8; i < fields.length && i < configPage * 8; i++)
         {
             Field f = fields[i];
@@ -180,7 +194,8 @@ public class CommandConfig {
             // BUG: after setting a config value, page command only shows the value thats been modified (on that page)
             // client.player.sendMessage is for some reason not working???
             // not even the first one outside the loop (right after cont. 1 print)
-            client.player.sendMessage(
+            client.inGameHud.getChatHud()
+                    .addMessage(
                     Text.literal(MESSAGE_PREFIX)
                             .append(
                                     Text.literal(i + " - ")
@@ -222,7 +237,8 @@ public class CommandConfig {
                                         )
                                 )
                 );
-        client.player.sendMessage(pageSelectorText);
+        client.inGameHud.getChatHud()
+                .addMessage(pageSelectorText);
 
         return Command.SINGLE_SUCCESS;
     }
@@ -237,16 +253,19 @@ public class CommandConfig {
         try {
             f = ModConfig.class.getField(configName);
         } catch (NoSuchFieldException e) {
-            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
+            client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
             return Command.SINGLE_SUCCESS;
         }
 
         Description description = f.getAnnotation(Description.class);
 
         // cant have too many brackets, right? (im always right)
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + configName + (description != null && !description.value().isBlank() ? ": " + description.value() : "")));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + configName + (description != null && !description.value().isBlank() ? ": " + description.value() : "")));
         try {
-            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Value (default): " + f.get(config) + " (" + f.get(new ModConfig()) + ")"));
+            client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "Value (default): " + f.get(config) + " (" + f.get(new ModConfig()) + ")"));
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }
@@ -264,7 +283,8 @@ public class CommandConfig {
         try {
             f = ModConfig.class.getField(configName);
         } catch (NoSuchFieldException e) {
-            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
+            client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "No such config option exists!"));
             return Command.SINGLE_SUCCESS;
         }
 
@@ -275,7 +295,8 @@ public class CommandConfig {
             throw new RuntimeException(e);
         }
 
-        client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Set " + configName + " to " + value + " (old value: " + oldValue + " )"));
+        client.inGameHud.getChatHud()
+                .addMessage(Text.of(MESSAGE_PREFIX + "Set " + configName + " to " + value + " (old value: " + oldValue + " )"));
         return Command.SINGLE_SUCCESS;
     }
 
@@ -283,9 +304,11 @@ public class CommandConfig {
     private static int editBlocklistsCommand(CommandContext<FabricClientCommandSource> context) {
         if (AdblockClient.editBlocklist()) {
             if (config.verboseMode)
-                client.player.sendMessage(Text.of(MESSAGE_PREFIX + "OK."));
+                client.inGameHud.getChatHud()
+                        .addMessage(Text.of(MESSAGE_PREFIX + "OK."));
         } else {
-            client.player.sendMessage(Text.of(MESSAGE_PREFIX + "Failed to open blocklists file. Set the EDITOR environment variable to a text editor"));
+            client.inGameHud.getChatHud()
+                    .addMessage(Text.of(MESSAGE_PREFIX + "Failed to open blocklists file. Set the EDITOR environment variable to a text editor"));
         }
         return Command.SINGLE_SUCCESS;
     }
