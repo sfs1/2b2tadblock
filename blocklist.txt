@@ -4,8 +4,6 @@ thou-shalt-be-smitten
 randomTextToBlock
 
 discord\.(com|gg)
-# discord\.(com|gg)\/(invite\/)?[a-Z0-9]{{0,12} - unncessary since above catches all discord links!
-
 # URL shorteners
 shorturl\.at\/
 bit\.ly\/
@@ -20,3 +18,7 @@ donfuer\.com
 
 # old: 
 # (shulkers?\.store|shulkerstore\.com)|((discord\.com)|((discord)?(\.|_)gg))\/(invite\/)?[a-zA-Z0-9]{0,8}|(hydra|shop|shulker|nox|2b2t|kit|store|tools|market|mart)[a-zA-Z0-9]*(\.store|\.shop)|shorturl\.at\/.*|(rusherhack|RusherHack)\.org(\/.*)?
+
+
+!SERVER earthmc.net
+\/t join .*
