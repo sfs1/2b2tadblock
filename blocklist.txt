@@ -22,3 +22,6 @@ donfuer\.com
 
 !SERVER earthmc.net
 \/t join .*
+# voting
+\[Michelle Obama
+https:\/\/minecraftservers.org\/
