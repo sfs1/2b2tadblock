@@ -11,7 +11,7 @@ tinyurl\.com\/
 
 !SERVER 2b2t.org
 # Most shops and generic terms
-(hydra|shop|shulkers?|nox|2b2t|kit|store|tools|market|mart)*[a-zA-z0-9]*(\.store|\.shop|\.com|\.net)
+(hydra|shop|shulkers?|nox|2b2t|kit|store|tools|market|shop|mart)*[a-zA-z0-9]*(\.store|\.shop|\.com|\.net)
 # Rusher
 (rusherhack|RusherHack)\.org(\/\.)? 
 donfuer\.com
